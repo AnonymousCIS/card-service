@@ -1,11 +1,13 @@
-package org.anonymous.entities;
+package org.anonymous.card.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.anonymous.card.constants.Category;
 import org.anonymous.global.entities.BaseMemberEntity;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Entity

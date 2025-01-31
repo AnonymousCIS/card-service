@@ -1,4 +1,4 @@
-package org.anonymous.card;
+package org.anonymous.card.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
