@@ -30,21 +30,21 @@ public class CardCreateService {
         Faker faker = new Faker(Locale.KOREAN);
         Random random = new Random();
         card.setCardName(faker.commerce().material() + "카드"); // 이름 진짜 고민해봐야지 뭔지 모르겠다..
-        card.setAnnualFee(random.nextInt(50) * 1000); // 연회비
+        card.setAnnualFee(random.nextInt(50)); // 연회비
         card.setCardType(CardType.values()[random.nextInt(CardType.values().length)].getTarget()); // 카드타입
-        card.setLimit(random.nextLong(100) * 1000000L); // 카드한도
+        card.setLimit(random.nextLong(100)); // 카드한도
         card.setCategory(Category.values()[random.nextInt(Category.values().length)].getTarget()); // 카테고리
         card.setBackName(BankName.values()[random.nextInt(BankName.values().length)].getTarget());
         card.setDone(false);
 
         int targetAnnualFee = card.getAnnualFee();
 
-        String target = targetAnnualFee <= 10000 ? "1" : targetAnnualFee <= 20000 ? "2" : targetAnnualFee <= 30000 ? "3" : targetAnnualFee <= 40000 ? "4" : "5"; // 연회비부터
+        String target = targetAnnualFee <= 10 ? "1" : targetAnnualFee <= 20 ? "2" : targetAnnualFee <= 30 ? "3" : targetAnnualFee <= 40 ? "4" : "5"; // 연회비부터
 
         Long limit = card.getLimit(); //
 
         target += card.getCardType();
-        target += limit <= 10000000 ? "1" : limit <= 20000000 ? "2" : limit <= 30000000 ? "3" : limit <= 40000000 ? "4" : limit <= 50000000 ? "5" : limit <= 60000000 ? "6" : limit <= 70000000 ? "7" : limit <= 80000000 ? "8" : "9";
+        target += limit <= 10 ? "1" : limit <= 20 ? "2" : limit <= 30 ? "3" : limit <= 40 ? "4" : limit <= 50 ? "5" : limit <= 60 ? "6" : limit <= 70 ? "7" : limit <= 80 ? "8" : "9";
 
         target += card.getCategory();
         target += card.getBackName();
