@@ -1,5 +1,6 @@
 package org.anonymous.member;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.anonymous.member.contants.Authority;
@@ -12,16 +13,23 @@ import java.util.List;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Member implements UserDetails {
+// 매핑되지않은 필드가 있으면 예외발생하지 않게 배제
+public class Member implements UserDetails { // 구현체
 
     private Long seq;
     private String email;
     private String name;
 
-    private List<Authority> _authorities;
+    @JsonAlias("authorities")
+    private List<Authority> _authorities; // 권한
 
+    /**
+     * 권한 체크 부분
+     * @return
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+
         return _authorities == null || _authorities.isEmpty()
                 ? List.of()
                 : _authorities.stream().map(s -> new SimpleGrantedAuthority(s.name())).toList();
@@ -37,6 +45,7 @@ public class Member implements UserDetails {
         return email;
     }
 
+    // 회원인증관련은 Member쪽에서 통제하기 때문에 여기서는 true로 처리하여 활성화함.
     @Override
     public boolean isAccountNonExpired() {
         return true;
