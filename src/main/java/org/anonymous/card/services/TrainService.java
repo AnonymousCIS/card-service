@@ -21,10 +21,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TrainService {
 
-    @Value("${python.path}")
+    @Value("${python.run.path}")
     private String runPath;
 
-    @Value("${python.script}")
+    @Value("${python.script.path}")
     private String scriptPath;
 
     private final CardRepository repository;
@@ -50,7 +50,7 @@ public class TrainService {
     public void train() {
         try {
             log.info("훈련 시작");
-            ProcessBuilder builder = new ProcessBuilder(runPath, scriptPath + "partial.py");
+            ProcessBuilder builder = new ProcessBuilder(runPath, scriptPath + "/train.py");
             Process process = builder.start();
             int code = process.waitFor();
             log.info("훈련 완료: {}", code);

@@ -34,24 +34,31 @@ public class CardCreateService {
         card.setCardType(CardType.values()[random.nextInt(CardType.values().length)].getTarget()); // 카드타입
         card.setLimit(random.nextLong(100)); // 카드한도
         card.setCategory(Category.values()[random.nextInt(Category.values().length)].getTarget()); // 카테고리
-        card.setBackName(BankName.values()[random.nextInt(BankName.values().length)].getTarget());
+        card.setBankName(BankName.values()[random.nextInt(BankName.values().length)].getTarget());
         card.setDone(false);
 
-        int targetAnnualFee = card.getAnnualFee();
+        card.setCardDescription(String.format("%s는 %s카드로 %s에 특화된 혜택을 제공합니다.", card.getCardName(), card.getCardType(), card.getCategory()));
 
-        String target = targetAnnualFee <= 10 ? "1" : targetAnnualFee <= 20 ? "2" : targetAnnualFee <= 30 ? "3" : targetAnnualFee <= 40 ? "4" : "5"; // 연회비부터
+        // region 타겟데이터 필요없어짐
 
-        Long limit = card.getLimit(); //
+//        int targetAnnualFee = card.getAnnualFee();
+//
+//        String target = targetAnnualFee <= 10 ? "1" : targetAnnualFee <= 20 ? "2" : targetAnnualFee <= 30 ? "3" : targetAnnualFee <= 40 ? "4" : "5"; // 연회비부터
+//
+//        Long limit = card.getLimit(); //
+//
+//        target += card.getCardType();
+//        target += limit <= 10 ? "1" : limit <= 20 ? "2" : limit <= 30 ? "3" : limit <= 40 ? "4" : limit <= 50 ? "5" : limit <= 60 ? "6" : limit <= 70 ? "7" : limit <= 80 ? "8" : "9";
+//
+//        target += card.getCategory();
+//        target += card.getBankName();
+//
+//        int _target = Integer.parseInt(target);
+//
+//        card.setTarget(_target);
 
-        target += card.getCardType();
-        target += limit <= 10 ? "1" : limit <= 20 ? "2" : limit <= 30 ? "3" : limit <= 40 ? "4" : limit <= 50 ? "5" : limit <= 60 ? "6" : limit <= 70 ? "7" : limit <= 80 ? "8" : "9";
+        // endregion
 
-        target += card.getCategory();
-        target += card.getBackName();
-
-        int _target = Integer.parseInt(target);
-
-        card.setTarget(_target);
         cardRepository.saveAndFlush(card);
 
     }

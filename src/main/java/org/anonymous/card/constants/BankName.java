@@ -42,4 +42,8 @@ public enum BankName {
                 .filter(bank -> bank.getTarget().equals(target))
                 .findFirst().orElse(null);
     }
+
+    public String toString() {
+        return title;
+    }
 }

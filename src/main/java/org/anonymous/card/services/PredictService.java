@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 
 @Lazy
@@ -18,21 +20,34 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PredictService {
 
-    @Value("${python.path}")
+    @Value("${python.run.path}")
     private String runPath;
 
-    @Value("${python.script}")
+    @Value("${python.script.path}")
     private String scriptPath;
 
     private final ObjectMapper om;
 
-    public List<Integer> predict(List<Double> items) {
+    public List<Integer> predict(List<Integer> items) {
         try {
             String data = om.writeValueAsString(items);
 
-            ProcessBuilder builder = new ProcessBuilder(runPath, scriptPath + "predict.py", data);
+            System.out.println("예측시작");
+
+            ProcessBuilder builder = new ProcessBuilder(runPath, scriptPath + "/predict_KNeightbors.py", data);
             Process process = builder.start();
+
+            int exitCode = process.waitFor();
+
+            System.out.println("예측종료 : " + exitCode);
+
             InputStream in = process.getInputStream();
+
+            InputStream err = process.getErrorStream();
+            String errorString = new String(err.readAllBytes(), StandardCharsets.UTF_8);
+            if (!errorString.isEmpty()) {
+                System.err.println("Python 오류 메시지: " + errorString);
+            }
 
             return om.readValue(in.readAllBytes(), new TypeReference<>() {});
 

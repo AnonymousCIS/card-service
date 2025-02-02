@@ -17,4 +17,8 @@ public enum Category {
         this.target = target;
         this.title = title;
     }
+
+    public String toString() {
+        return title;
+    }
 }

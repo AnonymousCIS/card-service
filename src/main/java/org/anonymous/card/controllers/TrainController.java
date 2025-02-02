@@ -29,7 +29,7 @@ public class TrainController {
 
     @GetMapping("/predict")
     public List<Integer> predict(@RequestParam("data") String data) {
-        List<Double> items = Arrays.stream(data.split("_")).map(Double::valueOf).toList();
+        List<Integer> items = Arrays.stream(data.split("_")).map(Integer::valueOf).toList();
         System.out.println("items:" + items);
         return predictService.predict(items);
     }
