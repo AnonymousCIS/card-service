@@ -1,82 +1,46 @@
 package org.anonymous.card.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.ToString;
+import org.anonymous.card.constants.Category;
 import org.anonymous.global.entities.BaseMemberEntity;
-import org.anonymous.member.contants.Authority;
 
 import java.io.Serializable;
 import java.util.List;
 
 @Data
 @Entity
+@Table(indexes = {
+        @Index(name="idx_gid", columnList = "gid, listOrder, createdAt"),
+        @Index(name="idx_gid_location", columnList = "gid, location, listOrder, createdAt")
+})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Config extends BaseMemberEntity implements Serializable {
 
-    @Id
-    @Column(length = 30)
-    private String bid;
+    @Id @GeneratedValue
+    private Long seq; // 카드 등록시 번호
 
-    @Column(length = 90, nullable = false)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    @Column(length=20)
+    private List<Category> categories ;// 분류 - API에서 뽑아옴, 혹은 우리가 정의해서 DB에 넣을거임
 
-    private boolean open;
-
-    @JsonIgnore
-    @ToString.Exclude
-    @OneToMany(mappedBy = "config", cascade = CascadeType.REMOVE)
-    private List<CardData> boardData;
+    @Column(length=30, nullable = false)
+    private String cardname; // 분류 - API에서 뽑아옴, 혹은 우리가 정의해서 DB에 넣을거임
 
     @Lob
-    private String category;
+    @Column(nullable = false)
+    private String content; // 카드 설명 - API에서 뽑아옴, 혹은 우리가 정의해서 DB에 넣을거임
 
-    private int rowsPerPage;
+    // API 보고 결정
+    @Column(nullable = false)
+    private boolean isOpen;
 
-    private int pageRanges;
+    // API 보고 결정
+    // API 에서 판매중지된 만료상품인지 여부가 없을경우에 사용할 논리값
+    // 일단 API에서는 모두 가져온 후
+    // isUse가 true이면 사용, false면 사용 X
+    @Column(nullable = false)
+    private boolean isUse;
 
-    private int pageRangesMobile;
-
-    private boolean useEditor;
-
-    private boolean useEditorImage;
-
-    private boolean useAttachFile;
-
-    private boolean useComment;
-
-    // 게시글 조회 하단에 게시글 목록 노출 여부
-    private boolean listUnderView;
-
-    // 게시글 작성 후 이동 경로
-    // list : 목록
-    // view : 게시글 조회
-    private String locationAfterWriting;
-
-    private String skin;
-
-    @Enumerated(EnumType.STRING)
-    @Column(length = 20, nullable = false)
-    private Authority listAuthority;
-
-    @Enumerated(EnumType.STRING)
-    @Column(length = 20, nullable = false)
-    private Authority viewAuthority;
-
-    @Enumerated(EnumType.STRING)
-    @Column(length = 20, nullable = false)
-    private Authority writeAuthority;
-
-    @Enumerated(EnumType.STRING)
-    @Column(length = 20, nullable = false)
-    private Authority commentAuthority;
-
-    @Transient
-    private List<String> categories;
-
-    @Transient
-    private boolean listable;
-
-    @Transient
-    private boolean writable;
 }

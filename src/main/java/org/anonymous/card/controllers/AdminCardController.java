@@ -31,14 +31,15 @@ public class AdminCardController {
 
     @PostMapping("/config/save")
     public JSONData save(@Valid @RequestBody RequestConfig form, Errors errors) {
+
+
+
         if (errors.hasErrors()) {
 
             throw new BadRequestException(utils.getErrorMessages(errors));
         }
 
-        Config config = updateService.process(form);
-
-        return new JSONData(config);
+        return null;
     }
 
     /**
