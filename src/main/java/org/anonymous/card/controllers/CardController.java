@@ -4,12 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.anonymous.global.rests.JSONData;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name="카드 API", description = "카드 생성, 수정, 조회, 삭제, 검증 기능 제공")
 @RestController
@@ -18,14 +15,13 @@ public class CardController {
 
     /**
      * 카드 단일 생성 & 수정 처리
-     * @param files
-     * @param errors
+
      * @return
      */
     @Operation(summary = "카드 단일 생성 & 수정 처리")
     @ApiResponse(description = "...")
     @PostMapping("/save")
-    public JSONData save(@RequestPart("card") MultipartFile[] files, @Valid Errors errors) {
+    public JSONData save() {
 
         return null;
     }
