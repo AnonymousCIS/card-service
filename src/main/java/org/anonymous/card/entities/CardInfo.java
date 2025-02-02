@@ -16,7 +16,7 @@ import java.util.List;
         @Index(name="idx_gid_location", columnList = "gid, location, listOrder, createdAt")
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Config extends BaseMemberEntity implements Serializable {
+public class CardInfo extends BaseMemberEntity implements Serializable {
 
     @Id @GeneratedValue
     private Long seq; // 카드 등록시 번호
