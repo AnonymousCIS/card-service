@@ -37,9 +37,9 @@ public class CardInfo extends BaseMemberEntity implements Serializable {
     private boolean isOpen;
 
     // API 보고 결정
-// API 에서 판매중지된 만료상품인지 여부가 없을경우에 사용할 논리값
-// 일단 API에서는 모두 가져온 후
-// isUse가 true이면 사용, false면 사용 X
+    // API 에서 판매중지된 만료상품인지 여부가 없을경우에 사용할 논리값
+    // 일단 API에서는 모두 가져온 후
+    // isUse가 true이면 사용, false면 사용 X
     @Column(nullable = false)
     private boolean isUse;
 

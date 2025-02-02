@@ -4,8 +4,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.anonymous.global.exceptions.BadRequestException;
+import org.anonymous.global.libs.Utils;
 import org.anonymous.global.rests.JSONData;
+import org.apache.http.client.config.RequestConfig;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,17 +21,25 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminCardController {
 
-//    /**
-//     * 카드 설정 등록, 수정 처리
-//     * @return
-//     */
-//    @Operation(summary = "카드 단일 등록 & 수정 처리", description = "신규 카드 설정을 등록하거나 혹은 기존 카드 설정을 수정합니다.")
-//
-//    @PostMapping("/config/save")
-//    public JSONData save() {
-//
-//        return null;
-//    }
+    private final Utils utils;
+
+    /**
+     * 카드 설정 등록, 수정 처리
+     * @return
+     */
+    @Operation(summary = "카드 단일 등록 & 수정 처리", description = "신규 카드 설정을 등록하거나 혹은 기존 카드 설정을 수정합니다.")
+
+    @PostMapping("/config/save")
+    public JSONData save(@Valid @RequestBody RequestConfig form, Errors errors) {
+        if (errors.hasErrors()) {
+
+            throw new BadRequestException(utils.getErrorMessages(errors));
+        }
+
+        Config config = updateService.process(form);
+
+        return new JSONData(config);
+    }
 
     /**
      * 카드 설정 목록

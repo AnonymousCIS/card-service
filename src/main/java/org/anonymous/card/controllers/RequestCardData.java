@@ -6,7 +6,7 @@ import org.anonymous.card.constants.Category;
 
 @Data
 public class RequestCardData {
-    
+
     private Long seq;
 
     @NotBlank
