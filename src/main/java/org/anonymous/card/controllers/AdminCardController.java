@@ -18,5 +18,7 @@ public class AdminCardController {
     // U - (단일, 목록 일괄 처리) - PatchMapping
     // D - (단일, 목록 일괄 처리) - DeleteMapping
 
+    //-------
+
     // 3. UserCard D - (단일, 목록 일괄 처리) - DeleteMapping
 }
