@@ -3,11 +3,17 @@ package org.anonymous.card.controllers;
 import lombok.RequiredArgsConstructor;
 import org.anonymous.card.entities.CardEntity;
 import org.anonymous.card.entities.RecommendCard;
+import org.anonymous.card.entities.UserCardEntity;
 import org.anonymous.card.services.CardInfoService;
 import org.anonymous.card.services.recommend.RecommendInfoService;
+import org.anonymous.card.services.usercard.UserCardDeleteService;
+import org.anonymous.card.services.usercard.UserCardInfoService;
+import org.anonymous.card.services.usercard.UserCardUpdateService;
 import org.anonymous.global.paging.ListData;
 import org.anonymous.global.rests.JSONData;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,6 +25,9 @@ public class CardController {
 
     private final CardInfoService cardInfoService;
     private final RecommendInfoService recommendInfoService;
+    private final UserCardInfoService userCardInfoService;
+    private final UserCardUpdateService userCardUpdateService;
+    private final UserCardDeleteService userCardDeleteService;
 
     /**
      * 단일 조회 - 추천받은 내역 조회
@@ -56,8 +65,11 @@ public class CardController {
      * @return
      */
     @GetMapping("/card/list")
-    public ListData<CardEntity> cardList(CardSearch cardSearch) {
-        return cardInfoService.cardList(cardSearch);
+    public JSONData cardList(CardSearch cardSearch) {
+
+        ListData<CardEntity> items = cardInfoService.cardList(cardSearch);
+
+        return new JSONData(items);
     }
 
     // 3. UserCard C - (단일) - PostMapping
@@ -65,13 +77,25 @@ public class CardController {
     // U - 유저 삭제(deletedAt을 현재 시간으로 하고 조회에서 제외) - PatchMapping
 
     /**
+     * 유저 카드 단일, 목록 생성
+     * @param card
+     * @return
+     */
+    @PostMapping("/user/create")
+    public JSONData createCard(@RequestBody List<Long> card) {
+
+        List<UserCardEntity> cards = userCardUpdateService.update(card);
+        return new JSONData(cards);
+    }
+
+    /**
      * user Card 단일 조회
      * @return
      */
-    @GetMapping("/user/view")
-    public JSONData userCardInfo() {
-        
-        return null;
+    @GetMapping("/user/view/{seq}")
+    public JSONData userCardInfo(@PathVariable("seq") Long seq) {
+        UserCardEntity card = userCardInfoService.get(seq);
+        return new JSONData(card);
     }
 
 
@@ -80,9 +104,9 @@ public class CardController {
      * @return
      */
     @GetMapping("/user/list")
-    public JSONData userCardList() {
-        
-        return null;
+    public JSONData userCardList(RecommendCardSearch search) {
+        ListData<UserCardEntity> cards = userCardInfoService.cardList(search);
+        return new JSONData(cards);
     }
 
     /**
@@ -90,13 +114,10 @@ public class CardController {
      * @return
      */
     @PatchMapping("/user/deletes")
-    public JSONData deleteUserCards() {
-        
-        return null;
+    public JSONData deleteUserCards(List<Long> seq) {
+        List<UserCardEntity> cards = userCardDeleteService.deletes(seq, false, "remove");
+        return new JSONData(cards);
     }
-    
-    
-    
 }
 
 
