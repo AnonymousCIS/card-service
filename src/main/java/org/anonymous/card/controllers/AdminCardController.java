@@ -4,9 +4,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.anonymous.card.entities.CardEntity;
 import org.anonymous.card.entities.RecommendCard;
+import org.anonymous.card.entities.UserCardEntity;
 import org.anonymous.card.services.CardDeleteService;
 import org.anonymous.card.services.CardUpdateService;
 import org.anonymous.card.services.recommend.RecommendDeleteService;
+import org.anonymous.card.services.usercard.UserCardDeleteService;
 import org.anonymous.card.validators.CardValidator;
 import org.anonymous.global.exceptions.BadRequestException;
 import org.anonymous.global.libs.Utils;
@@ -29,6 +31,7 @@ public class AdminCardController {
     private final CardValidator cardValidator;
     private final CardDeleteService cardDeleteService;
     private final RecommendDeleteService recommendDeleteService;
+    private final UserCardDeleteService userCardDeleteService;
 
     // 1. RecommendCard D - (단일, 목록 일괄 처리) - DeleteMapping
 
@@ -111,9 +114,9 @@ public class AdminCardController {
      * @return
      */
     @DeleteMapping("/user/removes")
-    public JSONData removeUsers() {
-
-        return null;
+    public JSONData removeUsers(@RequestParam("seq") List<Long> seq) {
+        List<UserCardEntity> userCardEntities = userCardDeleteService.deletes(seq, false, "remove");
+        return new JSONData(userCardEntities);
     }
 }
 

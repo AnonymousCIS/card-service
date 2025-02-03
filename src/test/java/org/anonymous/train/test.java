@@ -28,7 +28,7 @@ public class test {
 
     @Test
     void contextLoads() {
-        cardUpdateService.randomCreate(1000);
+        cardUpdateService.randomCreate(10000);
     }
 
     @Test

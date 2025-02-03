@@ -42,7 +42,7 @@ public class CardController {
      * 목록 조회 - 추천받은 내역 조회 -> 페이지네이션 필요
      */
     @GetMapping("/recommend/list")
-    public JSONData recommendList(RecommendCardSearch search) {
+    public JSONData recommendList(@ModelAttribute RecommendCardSearch search) {
         ListData<RecommendCard> items = recommendInfoService.cardList(search);
         return new JSONData(items);
     }
@@ -65,7 +65,7 @@ public class CardController {
      * @return
      */
     @GetMapping("/card/list")
-    public JSONData cardList(CardSearch cardSearch) {
+    public JSONData cardList(@ModelAttribute CardSearch cardSearch) {
 
         ListData<CardEntity> items = cardInfoService.cardList(cardSearch);
 
@@ -104,7 +104,7 @@ public class CardController {
      * @return
      */
     @GetMapping("/user/list")
-    public JSONData userCardList(RecommendCardSearch search) {
+    public JSONData userCardList(@ModelAttribute RecommendCardSearch search) {
         ListData<UserCardEntity> cards = userCardInfoService.cardList(search);
         return new JSONData(cards);
     }

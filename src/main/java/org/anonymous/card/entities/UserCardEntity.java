@@ -16,7 +16,6 @@ public class UserCardEntity extends BaseMemberEntity {
 
     private String email;
 
-    @ManyToOne
-    @JoinColumn(name = "card_seq")
+    @ManyToOne(fetch = FetchType.LAZY)
     private CardEntity card;
 }

@@ -87,10 +87,10 @@ public class CardInfoService {
 
         // 카드 한도로 검색
 
-        int cardLimitMax = search.getCardLimitMax() / 1000000;
-        int cardLimitMin = search.getCardLimitMin() / 1000000;
-        cardLimitMax = cardLimitMax < 1 ? 100 : cardLimitMax;
-        cardLimitMin = Math.max(cardLimitMin, 1);
+        int cardLimitMax = search.getCardLimitMax();
+        int cardLimitMin = search.getCardLimitMin();
+        cardLimitMax = cardLimitMax < 1 ? 100000000 : cardLimitMax;
+        cardLimitMin = cardLimitMin < 1 ? 1000000 : cardLimitMin;
 
         andBuilder.and(cardEntity.limit.between(cardLimitMin, cardLimitMax));
 
