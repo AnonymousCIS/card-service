@@ -1,9 +1,10 @@
 package org.anonymous.train;
 
 
-import org.anonymous.card.services.CardCreateService;
+import org.anonymous.card.services.CardUpdateService;
 import org.anonymous.card.services.PredictService;
 import org.anonymous.card.services.TrainService;
+import org.anonymous.member.MockMember;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +18,7 @@ import java.util.List;
 public class test {
 
     @Autowired
-    private CardCreateService cardCreateService;
+    private CardUpdateService cardUpdateService;
 
     @Autowired
     private TrainService trainService;
@@ -27,11 +28,7 @@ public class test {
 
     @Test
     void contextLoads() {
-
-        for (int i = 0; i < 10000; i++) {
-            cardCreateService.randomCreate();
-        }
-
+        cardUpdateService.randomCreate(1000);
     }
 
     @Test
@@ -41,6 +38,7 @@ public class test {
     }
 
     @Test
+    @MockMember
     void test2() {
         List<Integer> items = new ArrayList<>();
         items.add(1);
@@ -49,7 +47,7 @@ public class test {
         items.add(4);
         items.add(5);
         System.out.println(items);
-        List<Integer> test = predictService.predict(items);
+        List<Long> test = predictService.predict(items);
         System.out.println(test);
     }
 }

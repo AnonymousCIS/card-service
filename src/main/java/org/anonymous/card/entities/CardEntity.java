@@ -2,6 +2,9 @@ package org.anonymous.card.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.anonymous.card.constants.BankName;
+import org.anonymous.card.constants.CardType;
+import org.anonymous.card.constants.Category;
 import org.anonymous.global.entities.BaseEntity;
 
 @Data
@@ -31,4 +34,13 @@ public class CardEntity extends BaseEntity {
     private boolean done;
 
     private boolean isOpen;
+
+    @Transient
+    private CardType _cardType;
+
+    @Transient
+    private BankName _bankName;
+
+    @Transient
+    private Category _category;
 }
