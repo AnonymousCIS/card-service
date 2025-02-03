@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Slf4j
@@ -53,6 +55,13 @@ public class TrainService {
             ProcessBuilder builder = new ProcessBuilder(runPath, scriptPath + "/train.py");
             Process process = builder.start();
             int code = process.waitFor();
+
+            InputStream err = process.getErrorStream();
+            String errorString = new String(err.readAllBytes(), StandardCharsets.UTF_8);
+            if (!errorString.isEmpty()) {
+                System.err.println("Python 오류 메시지: " + errorString);
+            }
+
             log.info("훈련 완료: {}", code);
 
             // 훈련 데이터 완료 처리

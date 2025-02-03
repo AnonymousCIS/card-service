@@ -65,7 +65,7 @@ public class PredictService {
                 recommendCards.add(recommendCard);
             }
             recommendCardRepository.saveAllAndFlush(recommendCards);
-            return om.readValue(in.readAllBytes(), new TypeReference<>() {});
+            return results;
 
         } catch (Exception e) {
             e.printStackTrace();

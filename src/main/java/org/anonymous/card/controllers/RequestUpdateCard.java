@@ -22,4 +22,6 @@ public class RequestUpdateCard {
     private Category category; // 카테고리 SHOPPING, LIFE 등등.. -> 이넘으로 체크하자 특성5 -> 변할수도 있는 자료형
 
     private String cardDescription; // 카드설명
+
+    private boolean isOpen = true;
 }

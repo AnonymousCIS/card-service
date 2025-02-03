@@ -16,31 +16,30 @@ public class CardEntity extends BaseEntity {
 
     private String cardName; // 카드이름
 
-    private int annualFee; // 연회비 특성1
+    private CardType cardType;
 
-    private int cardType; // 카드종류 -> 이넘으로 해야할듯? -> 1. 개인체크, 2. 개인신용 3. 법인체크, 4. 법인신용.. 특성2 -> 변할수도 있는 자료형
+    private BankName bankName;
 
-    private Long limit; // 카드한도 특성3
+    private Category category;
 
-    private String bankName; // 은행 종류 이 친구도 이넘으로 해야할듯. 특성4 -> 변할수도 있는 자료형
+    private Long limit;
 
-    private int category; // 카테고리 SHOPPING, LIFE 등등.. -> 이넘으로 체크하자 특성5 -> 변할수도 있는 자료형
+    private int annualFee;
 
     @Lob
     private String cardDescription; // 카드설명
-
-    // private int target; // 정답데이터....
 
     private boolean done;
 
     private boolean isOpen;
 
-    @Transient
-    private CardType _cardType;
+    private int item1_annualFee; // 연회비 특성1
 
-    @Transient
-    private BankName _bankName;
+    private int item2_cardType; // 카드종류 -> 이넘으로 해야할듯? -> 1. 개인체크, 2. 개인신용 3. 법인체크, 4. 법인신용.. 특성2 -> 변할수도 있는 자료형
 
-    @Transient
-    private Category _category;
+    private Long item3_limit; // 카드한도 특성3
+
+    private int item4_bankName; // 은행 종류 이 친구도 이넘으로 해야할듯. 특성4 -> 변할수도 있는 자료형
+
+    private int item5_category; // 카테고리 SHOPPING, LIFE 등등.. -> 이넘으로 체크하자 특성5 -> 변할수도 있는 자료형
 }

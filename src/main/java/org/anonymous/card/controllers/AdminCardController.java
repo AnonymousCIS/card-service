@@ -3,8 +3,10 @@ package org.anonymous.card.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.anonymous.card.entities.CardEntity;
+import org.anonymous.card.entities.RecommendCard;
 import org.anonymous.card.services.CardDeleteService;
 import org.anonymous.card.services.CardUpdateService;
+import org.anonymous.card.services.recommend.RecommendDeleteService;
 import org.anonymous.card.validators.CardValidator;
 import org.anonymous.global.exceptions.BadRequestException;
 import org.anonymous.global.libs.Utils;
@@ -26,6 +28,7 @@ public class AdminCardController {
     private final Utils utils;
     private final CardValidator cardValidator;
     private final CardDeleteService cardDeleteService;
+    private final RecommendDeleteService recommendDeleteService;
 
     // 1. RecommendCard D - (단일, 목록 일괄 처리) - DeleteMapping
 
@@ -33,10 +36,10 @@ public class AdminCardController {
      * 추천내역 단일, 목록 삭제
      * @return
      */
-    @DeleteMapping("/recommend/delete")
-    public JSONData recommendDelete() {
-
-        return null;
+    @DeleteMapping("/recommend/remove")
+    public JSONData recommendDelete(@RequestParam("seq") List<Long> seq) {
+        List<RecommendCard> cards = recommendDeleteService.deletes(seq, false, "remove");
+        return new JSONData(cards);
     }
 
     // 2. Card Entity C - (단일) - PostMapping
@@ -47,7 +50,7 @@ public class AdminCardController {
      * 카드 단일 생성
      * @return
      */
-    @PostMapping("/card/create")
+    @PostMapping("/create")
     public JSONData createCards(@RequestBody @Valid RequestCard card, Errors errors) {
 
         cardValidator.validate(card, errors);
@@ -64,33 +67,37 @@ public class AdminCardController {
      * 카드 일괄 수정 처리
      * @return
      */
-    @PatchMapping("/card/updates")
+    @PatchMapping("/updates")
     public JSONData updateCards(@RequestBody List<RequestUpdateCard> cards) {
         List<CardEntity> cardEntities = cardUpdateService.cardUpdates(cards);
         return new JSONData(cardEntities);
     }
 
-    @PatchMapping("/card/update")
-    public JSONData updateCard(@RequestBody RequestUpdateCard cards) {
-        CardEntity cardEntity = cardUpdateService.cardUpdate(cards);
-        return new JSONData(cardEntity);
-    }
+    // region 필요없는거
 
-    /**
-     * 카드 일괄 삭제 - deleteAt Update
-     * @return
-     */
-    @PatchMapping("/card/deletes")
-    public JSONData deleteCards(@RequestParam("seq") List<Long> seq) {
-        List<CardEntity> cardEntities = cardDeleteService.deletes(seq, false,"delete");
-        return new JSONData(cardEntities);
-    }
+//    @PatchMapping("/update")
+//    public JSONData updateCard(@RequestBody RequestUpdateCard cards) {
+//        CardEntity cardEntity = cardUpdateService.cardUpdate(cards);
+//        return new JSONData(cardEntity);
+//    }
+
+//    /**
+//     * 카드 일괄 오픈 수정 - deleteAt Update
+//     * @return
+//     */
+//    @PatchMapping("/deletes")
+//    public JSONData deleteCards(@RequestParam("seq") List<Long> seq) {
+//        List<CardEntity> cardEntities = cardDeleteService.deletes(seq, false,"delete");
+//        return new JSONData(cardEntities);
+//    }
+
+    // endregion
 
     /**
      * 카드 단일, 일괄 찐 삭제
      * @return
      */
-    @DeleteMapping("/card/removes")
+    @DeleteMapping("/removes")
     public JSONData removeCards(@RequestParam("seq") List<Long> seq) {
         List<CardEntity> cardEntities = cardDeleteService.deletes(seq, false, "remove");
         return new JSONData(cardEntities);
@@ -103,7 +110,7 @@ public class AdminCardController {
      * 유저 카드 단일, 일괄 찐 삭제
      * @return
      */
-    @DeleteMapping("/card/user/removes")
+    @DeleteMapping("/user/removes")
     public JSONData removeUsers() {
 
         return null;

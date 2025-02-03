@@ -2,7 +2,9 @@ package org.anonymous.card.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.anonymous.card.entities.CardEntity;
+import org.anonymous.card.entities.RecommendCard;
 import org.anonymous.card.services.CardInfoService;
+import org.anonymous.card.services.recommend.RecommendInfoService;
 import org.anonymous.global.paging.ListData;
 import org.anonymous.global.rests.JSONData;
 import org.springframework.web.bind.annotation.*;
@@ -16,23 +18,24 @@ public class CardController {
 
 
     private final CardInfoService cardInfoService;
+    private final RecommendInfoService recommendInfoService;
 
     /**
      * 단일 조회 - 추천받은 내역 조회
      */
-    @GetMapping("/recommend/info")
-    public JSONData recommendInfo() {
-
-        return null;
+    @GetMapping("/recommend/view/{seq}")
+    public JSONData recommendInfo(@PathVariable("seq") Long seq) {
+        RecommendCard card = recommendInfoService.getRecommendCard(seq);
+        return new JSONData(card);
     }
 
     /**
      * 목록 조회 - 추천받은 내역 조회 -> 페이지네이션 필요
      */
     @GetMapping("/recommend/list")
-    public JSONData recommendList() {
-
-        return null;
+    public JSONData recommendList(RecommendCardSearch search) {
+        ListData<RecommendCard> items = recommendInfoService.cardList(search);
+        return new JSONData(items);
     }
 
 
@@ -42,8 +45,8 @@ public class CardController {
      * 단일 조회 card
      * @return
      */
-    @GetMapping("/card/info")
-    public JSONData cardInfo(@RequestParam("seq") Long seq) {
+    @GetMapping("/card/view/{seq}")
+    public JSONData cardInfo(@PathVariable("seq") Long seq) {
         CardEntity card = cardInfoService.getCardInfo(seq);
         return new JSONData(card);
     }
@@ -65,7 +68,7 @@ public class CardController {
      * user Card 단일 조회
      * @return
      */
-    @GetMapping("/card/user/info")
+    @GetMapping("/user/view")
     public JSONData userCardInfo() {
         
         return null;
@@ -76,19 +79,8 @@ public class CardController {
      * user card 목록 조회
      * @return
      */
-    @GetMapping("/card/user/list")
+    @GetMapping("/user/list")
     public JSONData userCardList() {
-        
-        return null;
-    }
-
-    /**
-     * 유저 카드 단일 삭제 - deleteAt Update
-     * @return
-     */
-    @PatchMapping("/card/user/delete")
-    public JSONData deleteUserCard() {
-        
         
         return null;
     }
@@ -97,7 +89,7 @@ public class CardController {
      * 유저 카드 목록 삭제 - deleteAt Update
      * @return
      */
-    @PatchMapping("/card/user/deletes")
+    @PatchMapping("/user/deletes")
     public JSONData deleteUserCards() {
         
         return null;
