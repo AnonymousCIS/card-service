@@ -34,7 +34,7 @@ public class CardInfoService {
         if (!memberUtil.isAdmin()){
             throw new BadRequestException();
         }
-        CardEntity item = CardRepository.findBySeq(seq).orElseThrow(CardDataNotFoundException::new);
+        CardEntity item = cardRepository.findBySeq(seq).orElseThrow(CardDataNotFoundException::new);
         return null;
     }
 

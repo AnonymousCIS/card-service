@@ -6,6 +6,7 @@ import org.anonymous.card.repositories.CardRepository;
 import org.anonymous.card.services.CardCreateService;
 import org.anonymous.card.services.CardDeleteService;
 import org.anonymous.card.services.CardInfoService;
+import org.anonymous.card.services.TrainService;
 import org.anonymous.global.libs.Utils;
 import org.anonymous.global.rests.JSONData;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,8 @@ public class CardController {
     private final Utils utils;
     private final CardInfoService infoService;
     private final CardDeleteService deleteService;
+    private final TrainService trainService;
+    private final CardRepository cardRepository;
 
     // 1. RecommendCard C - (목록, 업데이트처리지 수정이 아님) - PostMapping
     // R (단일, 목록 조회(Pagination)) - GetMapping
@@ -39,19 +42,11 @@ public class CardController {
 
     @PostMapping("/user/save/{seq}")
     public JSONData save() {
+    // 카드엔티티에서 있는지 유무확인후 저장
+    // 카드 seq 관계매핑
+    // 데이터랑 회원 이메일(createdby)
 
-
-        public class PredictService {
-            PredictService.findById(seq)
-                    .
-
-            orElseThrow(() ->new
-
-            BadRequestException("Invalid card ID: "+seq));
-
-
-    CardRepository.saveAllAndFlush(items);
-        return null;
+            return null;
         }
 
 
