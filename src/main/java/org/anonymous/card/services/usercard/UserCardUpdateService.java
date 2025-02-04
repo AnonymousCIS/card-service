@@ -6,6 +6,7 @@ import org.anonymous.card.entities.UserCardEntity;
 import org.anonymous.card.exceptions.CardNotFoundException;
 import org.anonymous.card.repositories.CardRepository;
 import org.anonymous.card.repositories.UserCardEntityRepository;
+import org.anonymous.card.services.CardInfoService;
 import org.anonymous.member.MemberUtil;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -21,13 +22,17 @@ public class UserCardUpdateService {
     private final UserCardEntityRepository entityRepository;
     private final MemberUtil memberUtil;
     private final CardRepository cardRepository;
+    private final CardInfoService cardInfoService;
 
     public List<UserCardEntity> update(List<Long> seqs) {
 
         List<UserCardEntity> entities = new ArrayList<>();
         for (Long seq : seqs) {
-            UserCardEntity userCardEntity = update(seq);
-            entities.add(userCardEntity);
+            UserCardEntity userCard = new UserCardEntity();
+            CardEntity card = cardInfoService.getCardInfo(seq);
+            userCard.setCard(card);
+            userCard.setEmail(memberUtil.getMember().getEmail());
+            entities.add(userCard);
         }
         addInfo(false, null, entities);
         return entities;
@@ -35,7 +40,7 @@ public class UserCardUpdateService {
 
     public UserCardEntity update(Long seq) {
 
-        CardEntity card = cardRepository.findById(seq).orElseThrow(CardNotFoundException::new);
+        CardEntity card = cardInfoService.getCardInfo(seq);
 
         UserCardEntity userCard = new UserCardEntity();
 
