@@ -9,14 +9,12 @@ import org.anonymous.card.constants.BankName;
 import org.anonymous.card.constants.CardType;
 import org.anonymous.card.constants.Category;
 import org.anonymous.card.controllers.RecommendCardSearch;
-import org.anonymous.card.entities.QRecommendCard;
-import org.anonymous.card.entities.QUserCardEntity;
-import org.anonymous.card.entities.RecommendCard;
-import org.anonymous.card.entities.UserCardEntity;
+import org.anonymous.card.entities.*;
 import org.anonymous.card.exceptions.CardNotFoundException;
 import org.anonymous.card.repositories.UserCardEntityRepository;
 import org.anonymous.global.paging.ListData;
 import org.anonymous.global.paging.Pagination;
+import org.anonymous.member.MemberUtil;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -26,7 +24,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-@Lazy
+//@Lazy
 @Service
 @RequiredArgsConstructor
 public class UserCardInfoService {
@@ -34,9 +32,10 @@ public class UserCardInfoService {
     private final UserCardEntityRepository userCardEntityRepository;
     private final JPAQueryFactory queryFactory;
     private final HttpServletRequest request;
+    private final MemberUtil memberUtil;
 
     public UserCardEntity get(Long seq) {
-        return userCardEntityRepository.findById(seq).orElseThrow(CardNotFoundException::new);
+        return userCardEntityRepository.findBySeq(seq).orElseThrow(CardNotFoundException::new);
     }
 
     public ListData<UserCardEntity> cardList (RecommendCardSearch search) {
@@ -45,6 +44,7 @@ public class UserCardInfoService {
         limit = limit < 1 ? 20 : limit;
         int offset = (page - 1) * limit;
         QUserCardEntity recommendCard = QUserCardEntity.userCardEntity;
+        QCardEntity cardEntity = QCardEntity.cardEntity;
 
         BooleanBuilder andBuilder = new BooleanBuilder();
         String skey = search.getSkey();
@@ -94,6 +94,10 @@ public class UserCardInfoService {
             andBuilder.and(recommendCard.card.cardType.in(cardTypes));
         }
 
+        if (!memberUtil.isAdmin()) {
+            andBuilder.and(cardEntity.isOpen);
+        }
+
 
         String dateType = search.getDateType();
         dateType = StringUtils.hasText(dateType) ? dateType : "createdAt"; // 생성날짜 기준
@@ -117,7 +121,7 @@ public class UserCardInfoService {
         }
 
         List<UserCardEntity> items = queryFactory.selectFrom(recommendCard)
-                .leftJoin(recommendCard.card)
+                .leftJoin(recommendCard.card, cardEntity)
                 .fetchJoin()
                 .where(andBuilder)
                 .orderBy(recommendCard.card.createdAt.desc())

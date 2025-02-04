@@ -39,14 +39,17 @@ public class CardValidator implements Validator {
 
             if (cardRepository.exists(cardName)) {
                 errors.rejectValue("cardName", "Duplicated");
+                return;
             }
 
             if (annualFee <= 0) {
-                errors.rejectValue("annualFee", "Duplicated");
+                errors.rejectValue("annualFee", "Limit");
+                return;
             }
 
             if (limit <= 0L) {
-                errors.rejectValue("limit", "Duplicated");
+                errors.rejectValue("limit", "Limit");
+                return;
             }
         }
 

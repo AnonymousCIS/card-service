@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.anonymous.card.entities.CardEntity;
 import org.anonymous.card.services.PredictService;
 import org.anonymous.card.services.TrainService;
+import org.anonymous.global.rests.JSONData;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,9 +29,9 @@ public class TrainController {
     }
 
     @GetMapping("/predict")
-    public List<Long> predict(@RequestParam("data") String data) {
+    public JSONData predict(@RequestParam("data") String data) {
         List<Integer> items = Arrays.stream(data.split("_")).map(Integer::valueOf).toList();
-        System.out.println("items:" + items);
-        return predictService.predict(items);
+        List<CardEntity> cardEntities = predictService.predict(items);
+        return new JSONData(cardEntities);
     }
 }

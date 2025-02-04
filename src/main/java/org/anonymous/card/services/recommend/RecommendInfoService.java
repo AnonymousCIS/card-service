@@ -18,6 +18,7 @@ import org.anonymous.card.exceptions.CardNotFoundException;
 import org.anonymous.card.repositories.RecommendCardRepository;
 import org.anonymous.global.paging.ListData;
 import org.anonymous.global.paging.Pagination;
+import org.anonymous.member.MemberUtil;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -35,9 +36,10 @@ public class RecommendInfoService {
     private final RecommendCardRepository recommendCardRepository;
     private final JPAQueryFactory queryFactory;
     private final HttpServletRequest request;
+    private final MemberUtil memberUtil;
 
     public RecommendCard getRecommendCard(Long seq) {
-        return recommendCardRepository.findById(seq).orElseThrow(CardNotFoundException::new);
+        return recommendCardRepository.findBySeq(seq).orElseThrow(CardNotFoundException::new);
     }
 
     public ListData<RecommendCard> cardList (RecommendCardSearch search) {
@@ -46,6 +48,7 @@ public class RecommendInfoService {
         limit = limit < 1 ? 20 : limit;
         int offset = (page - 1) * limit;
         QRecommendCard recommendCard = QRecommendCard.recommendCard;
+        QCardEntity cardEntity = QCardEntity.cardEntity;
 
         BooleanBuilder andBuilder = new BooleanBuilder();
         String skey = search.getSkey();
@@ -117,8 +120,12 @@ public class RecommendInfoService {
             andBuilder.and(recommendCard.email.in(email));
         }
 
+        if (!memberUtil.isAdmin()) {
+            andBuilder.and(cardEntity.isOpen);
+        }
+
         List<RecommendCard> items = queryFactory.selectFrom(recommendCard)
-                .leftJoin(recommendCard.card)
+                .leftJoin(recommendCard.card, cardEntity)
                 .fetchJoin()
                 .where(andBuilder)
                 .orderBy(recommendCard.card.createdAt.desc())
