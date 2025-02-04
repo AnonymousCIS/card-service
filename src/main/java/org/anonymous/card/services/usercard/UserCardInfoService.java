@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-@Lazy
+//@Lazy
 @Service
 @RequiredArgsConstructor
 public class UserCardInfoService {
@@ -36,7 +36,7 @@ public class UserCardInfoService {
     private final HttpServletRequest request;
 
     public UserCardEntity get(Long seq) {
-        return userCardEntityRepository.findById(seq).orElseThrow(CardNotFoundException::new);
+        return userCardEntityRepository.findBySeq(seq).orElseThrow(CardNotFoundException::new);
     }
 
     public ListData<UserCardEntity> cardList (RecommendCardSearch search) {
