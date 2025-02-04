@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.anonymous.card.entities.CardEntity;
+import org.anonymous.card.entities.QCardEntity;
 import org.anonymous.card.entities.RecommendCard;
 import org.anonymous.card.repositories.CardRepository;
 import org.anonymous.card.repositories.RecommendCardRepository;
@@ -63,6 +64,9 @@ public class PredictService {
                 RecommendCard recommendCard = new RecommendCard();
                 recommendCard.setEmail(memberUtil.getMember().getEmail());
                 CardEntity card = cardInfoService.getCardInfo(result);
+                if (!card.isOpen()) {
+                    continue;
+                }
                 recommendCard.setCard(card);
                 cardEntities.add(card);
                 recommendCards.add(recommendCard);

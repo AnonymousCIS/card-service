@@ -15,6 +15,7 @@ import org.anonymous.card.exceptions.CardNotFoundException;
 import org.anonymous.card.repositories.CardRepository;
 import org.anonymous.global.paging.ListData;
 import org.anonymous.global.paging.Pagination;
+import org.anonymous.member.MemberUtil;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -33,12 +34,13 @@ public class CardInfoService {
     private final CardRepository cardRepository;
     private final JPAQueryFactory queryFactory;
     private final HttpServletRequest request;
+    private final MemberUtil memberUtil;
 
     public CardEntity getCardInfo (Long seq) {
 
         CardEntity card = cardRepository.findById(seq).orElseThrow(CardNotFoundException::new);
 
-        if (card.getDeletedAt() != null) {
+        if (!memberUtil.isAdmin() && !card.isOpen()) {
             throw new CardNotFoundException();
         }
 
@@ -103,6 +105,10 @@ public class CardInfoService {
         List<CardType> cardTypes = search.getCardTypes();
         if (cardTypes != null && !cardTypes.isEmpty()) {
             andBuilder.and(cardEntity.cardType.in(cardTypes));
+        }
+
+        if (!memberUtil.isAdmin()) {
+           andBuilder.and(cardEntity.isOpen);
         }
 
         String dateType = search.getDateType();

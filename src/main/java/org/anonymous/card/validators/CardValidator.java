@@ -42,11 +42,11 @@ public class CardValidator implements Validator {
             }
 
             if (annualFee <= 0) {
-                errors.rejectValue("annualFee", "Duplicated");
+                errors.rejectValue("annualFee", "Limit");
             }
 
             if (limit <= 0L) {
-                errors.rejectValue("limit", "Duplicated");
+                errors.rejectValue("limit", "Limit");
             }
         }
 

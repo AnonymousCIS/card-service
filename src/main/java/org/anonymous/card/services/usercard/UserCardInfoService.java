@@ -14,6 +14,7 @@ import org.anonymous.card.exceptions.CardNotFoundException;
 import org.anonymous.card.repositories.UserCardEntityRepository;
 import org.anonymous.global.paging.ListData;
 import org.anonymous.global.paging.Pagination;
+import org.anonymous.member.MemberUtil;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -31,6 +32,7 @@ public class UserCardInfoService {
     private final UserCardEntityRepository userCardEntityRepository;
     private final JPAQueryFactory queryFactory;
     private final HttpServletRequest request;
+    private final MemberUtil memberUtil;
 
     public UserCardEntity get(Long seq) {
         return userCardEntityRepository.findBySeq(seq).orElseThrow(CardNotFoundException::new);
@@ -90,6 +92,10 @@ public class UserCardInfoService {
         List<CardType> cardTypes = search.getCardTypes();
         if (cardTypes != null && !cardTypes.isEmpty()) {
             andBuilder.and(recommendCard.card.cardType.in(cardTypes));
+        }
+
+        if (!memberUtil.isAdmin()) {
+            andBuilder.and(cardEntity.isOpen);
         }
 
 
