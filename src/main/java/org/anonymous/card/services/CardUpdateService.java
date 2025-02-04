@@ -42,16 +42,16 @@ public class CardUpdateService {
             Faker faker = new Faker(Locale.KOREAN);
             Random random = new Random();
             card.setCardName(faker.commerce().material() + "카드"); // 이름 진짜 고민해봐야지 뭔지 모르겠다..
-            card.setAnnualFee(random.nextInt(30 * 1000)); // 연회비
+            card.setAnnualFee(random.nextInt(30) * 1000); // 연회비
             card.setCardType(CardType.values()[random.nextInt(CardType.values().length)]); // 카드타입
-            card.setLimit(random.nextLong(100 * 1000000L)); // 카드한도
+            card.setLimit(random.nextLong(100) * 1000000L); // 카드한도
             card.setCategory(Category.values()[random.nextInt(Category.values().length)]); // 카테고리
             card.setBankName(BankName.values()[random.nextInt(BankName.values().length)]);
             card.setDone(false);
 
 
             card.setCardDescription(String.format("%s는 %s카드로 %s에 특화된 혜택을 제공합니다.", card.getCardName(), card.getCardType().getTitle(), card.getCategory().getTitle()));
-            card.setItem1_annualFee(card.getAnnualFee());
+            card.setItem1_annualFee(card.getAnnualFee() / 1000);
             card.setItem2_cardType(card.getCardType().getTarget());
             card.setItem3_limit(card.getLimit() / 1000000L);
             card.setItem4_bankName(card.getBankName().getTarget());

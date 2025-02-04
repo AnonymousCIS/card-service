@@ -47,7 +47,7 @@ public class SecurityConfig {
                 })
                 .authorizeHttpRequests(c -> {
                    c.requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
-                           .anyRequest().permitAll();
+                           .anyRequest().authenticated();
                 });
 
 

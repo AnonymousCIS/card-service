@@ -12,8 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @SpringBootTest
 @ActiveProfiles({"default", "ml"})
@@ -54,8 +57,6 @@ public class test {
         System.out.println(items);
         List<Long> test = predictService.predict(items);
         System.out.println(test);
-
-
     }
 
     @Test
