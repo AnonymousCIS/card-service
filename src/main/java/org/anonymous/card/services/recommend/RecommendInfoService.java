@@ -46,6 +46,7 @@ public class RecommendInfoService {
         limit = limit < 1 ? 20 : limit;
         int offset = (page - 1) * limit;
         QRecommendCard recommendCard = QRecommendCard.recommendCard;
+        QCardEntity cardEntity = QCardEntity.cardEntity;
 
         BooleanBuilder andBuilder = new BooleanBuilder();
         String skey = search.getSkey();
@@ -118,7 +119,7 @@ public class RecommendInfoService {
         }
 
         List<RecommendCard> items = queryFactory.selectFrom(recommendCard)
-                .leftJoin(recommendCard.card)
+                .leftJoin(recommendCard.card, cardEntity)
                 .fetchJoin()
                 .where(andBuilder)
                 .orderBy(recommendCard.card.createdAt.desc())

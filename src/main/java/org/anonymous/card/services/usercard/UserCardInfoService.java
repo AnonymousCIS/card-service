@@ -9,10 +9,7 @@ import org.anonymous.card.constants.BankName;
 import org.anonymous.card.constants.CardType;
 import org.anonymous.card.constants.Category;
 import org.anonymous.card.controllers.RecommendCardSearch;
-import org.anonymous.card.entities.QRecommendCard;
-import org.anonymous.card.entities.QUserCardEntity;
-import org.anonymous.card.entities.RecommendCard;
-import org.anonymous.card.entities.UserCardEntity;
+import org.anonymous.card.entities.*;
 import org.anonymous.card.exceptions.CardNotFoundException;
 import org.anonymous.card.repositories.UserCardEntityRepository;
 import org.anonymous.global.paging.ListData;
@@ -45,6 +42,7 @@ public class UserCardInfoService {
         limit = limit < 1 ? 20 : limit;
         int offset = (page - 1) * limit;
         QUserCardEntity recommendCard = QUserCardEntity.userCardEntity;
+        QCardEntity cardEntity = QCardEntity.cardEntity;
 
         BooleanBuilder andBuilder = new BooleanBuilder();
         String skey = search.getSkey();
@@ -117,7 +115,7 @@ public class UserCardInfoService {
         }
 
         List<UserCardEntity> items = queryFactory.selectFrom(recommendCard)
-                .leftJoin(recommendCard.card)
+                .leftJoin(recommendCard.card, cardEntity)
                 .fetchJoin()
                 .where(andBuilder)
                 .orderBy(recommendCard.card.createdAt.desc())

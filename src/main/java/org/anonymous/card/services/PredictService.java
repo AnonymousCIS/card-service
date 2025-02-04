@@ -38,7 +38,7 @@ public class PredictService {
     private final CardInfoService cardInfoService;
     private final MemberUtil memberUtil;
 
-    public List<Long> predict(List<Integer> items) {
+    public List<CardEntity> predict(List<Integer> items) {
         try {
             String data = om.writeValueAsString(items);
 
@@ -56,6 +56,7 @@ public class PredictService {
             }
 
             List<Long> results = om.readValue(in.readAllBytes(), new TypeReference<>() {});
+            List<CardEntity> cardEntities = new ArrayList<>();
             List<RecommendCard> recommendCards = new ArrayList<>();
             System.out.println(results);
             for (Long result : results) {
@@ -63,10 +64,11 @@ public class PredictService {
                 recommendCard.setEmail(memberUtil.getMember().getEmail());
                 CardEntity card = cardInfoService.getCardInfo(result);
                 recommendCard.setCard(card);
+                cardEntities.add(card);
                 recommendCards.add(recommendCard);
             }
             recommendCardRepository.saveAllAndFlush(recommendCards);
-            return results;
+            return cardEntities;
 
         } catch (Exception e) {
             e.printStackTrace();

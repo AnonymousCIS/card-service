@@ -1,6 +1,7 @@
 package org.anonymous.train;
 
 
+import org.anonymous.card.entities.CardEntity;
 import org.anonymous.card.entities.RecommendCard;
 import org.anonymous.card.services.CardUpdateService;
 import org.anonymous.card.services.PredictService;
@@ -55,7 +56,7 @@ public class test {
         items.add(4);
         items.add(5);
         System.out.println(items);
-        List<Long> test = predictService.predict(items);
+        List<CardEntity> test = predictService.predict(items);
         System.out.println(test);
     }
 
