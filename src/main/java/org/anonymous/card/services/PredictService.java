@@ -57,6 +57,7 @@ public class PredictService {
 
             List<Long> results = om.readValue(in.readAllBytes(), new TypeReference<>() {});
             List<RecommendCard> recommendCards = new ArrayList<>();
+            System.out.println(results);
             for (Long result : results) {
                 RecommendCard recommendCard = new RecommendCard();
                 recommendCard.setEmail(memberUtil.getMember().getEmail());

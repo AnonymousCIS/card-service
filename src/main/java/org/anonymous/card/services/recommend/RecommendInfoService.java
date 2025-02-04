@@ -37,7 +37,7 @@ public class RecommendInfoService {
     private final HttpServletRequest request;
 
     public RecommendCard getRecommendCard(Long seq) {
-        return recommendCardRepository.findById(seq).orElseThrow(CardNotFoundException::new);
+        return recommendCardRepository.findBySeq(seq).orElseThrow(CardNotFoundException::new);
     }
 
     public ListData<RecommendCard> cardList (RecommendCardSearch search) {
