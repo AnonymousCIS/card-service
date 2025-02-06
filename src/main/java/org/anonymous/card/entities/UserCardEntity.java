@@ -14,6 +14,7 @@ public class UserCardEntity extends BaseMemberEntity {
     @Id @GeneratedValue
     private Long seq;
 
+    @Column(nullable = false)
     private String email;
 
     @ManyToOne(fetch = FetchType.LAZY)
