@@ -16,10 +16,13 @@ public class CardEntity extends BaseEntity {
 
     private String cardName; // 카드이름
 
+    @Enumerated(EnumType.STRING)
     private CardType cardType;
 
+    @Enumerated(EnumType.STRING)
     private BankName bankName;
 
+    @Enumerated(EnumType.STRING)
     private Category category;
 
     private Long limit;
