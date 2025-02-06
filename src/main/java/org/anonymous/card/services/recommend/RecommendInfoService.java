@@ -1,5 +1,7 @@
 package org.anonymous.card.services.recommend;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.DateTimePath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -16,17 +18,26 @@ import org.anonymous.card.entities.QRecommendCard;
 import org.anonymous.card.entities.RecommendCard;
 import org.anonymous.card.exceptions.CardNotFoundException;
 import org.anonymous.card.repositories.RecommendCardRepository;
+import org.anonymous.global.exceptions.BadRequestException;
+import org.anonymous.global.libs.Utils;
 import org.anonymous.global.paging.ListData;
 import org.anonymous.global.paging.Pagination;
+import org.anonymous.global.rests.JSONData;
 import org.anonymous.member.MemberUtil;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 
 @Lazy
 @Service
@@ -37,9 +48,27 @@ public class RecommendInfoService {
     private final JPAQueryFactory queryFactory;
     private final HttpServletRequest request;
     private final MemberUtil memberUtil;
+    private final Utils utils;
+    private final RestTemplate restTemplate;
+    private final ObjectMapper om;
 
     public RecommendCard getRecommendCard(Long seq) {
-        return recommendCardRepository.findBySeq(seq).orElseThrow(CardNotFoundException::new);
+        RecommendCard card = recommendCardRepository.findBySeq(seq).orElseThrow(CardNotFoundException::new);
+
+        ResponseEntity<JSONData> responseEntity = utils.returnData();
+
+        try {
+            String email = om.writeValueAsString(Objects.requireNonNull(responseEntity.getBody()).getData());
+
+            if (!email.equals(card.getEmail())) {
+                throw new CardNotFoundException();
+            }
+
+        } catch (JsonProcessingException e) {
+            throw new BadRequestException();
+        }
+
+        return card;
     }
 
     public ListData<RecommendCard> cardList (RecommendCardSearch search) {

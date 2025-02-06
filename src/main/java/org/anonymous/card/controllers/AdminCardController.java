@@ -1,5 +1,10 @@
 package org.anonymous.card.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.anonymous.card.entities.CardEntity;
@@ -26,12 +31,12 @@ import java.util.List;
  */
 public class AdminCardController {
 
-    private final CardUpdateService cardUpdateService;
     private final Utils utils;
     private final CardValidator cardValidator;
+    private final CardUpdateService cardUpdateService;
     private final CardDeleteService cardDeleteService;
-    private final RecommendDeleteService recommendDeleteService;
     private final UserCardDeleteService userCardDeleteService;
+    private final RecommendDeleteService recommendDeleteService;
 
     // 1. RecommendCard D - (단일, 목록 일괄 처리) - DeleteMapping
 
@@ -39,6 +44,9 @@ public class AdminCardController {
      * 추천내역 단일, 목록 삭제
      * @return
      */
+    @Operation(summary = "유저 추천내역 단일, 목록 삭제", method = "DELETE", description = "유저 추천내역 카드 삭제. DB내에서 삭제된다.")
+    @ApiResponse(responseCode = "200")
+    @Parameter(name="seq", description = "유저 카드 번호")
     @DeleteMapping("/recommend/remove")
     public JSONData recommendDelete(@RequestParam("seq") List<Long> seq) {
         List<RecommendCard> cards = recommendDeleteService.deletes(seq, false, "remove");
@@ -53,6 +61,51 @@ public class AdminCardController {
      * 카드 단일 생성
      * @return
      */
+    @Operation(summary = "카드 단일 생성", method = "POST", description = "카드 하나를 생성한다.")
+    @ApiResponse(responseCode = "200")
+    @Parameters({
+            @Parameter(name = "cardName", description = "카드이름", required = true),
+            @Parameter(name = "annualFee", description = "연회비", required = true, example = "1000 ~ 30000"),
+            @Parameter(name="CardType", description = "카드타입", required = true, examples = {
+                    @ExampleObject(name = "개인체크"),
+                    @ExampleObject(name = "개인신용"),
+                    @ExampleObject(name = "법인체크"),
+                    @ExampleObject(name = "법인신용")
+            }),
+            @Parameter(name = "limit", description = "카드 한도", required = true),
+            @Parameter(name = "BankName", description = "은행이름", required = true, examples = {
+                    @ExampleObject(name = "한국은행"),
+                    @ExampleObject(name = "국민은행"),
+                    @ExampleObject(name = "제일은행"),
+                    @ExampleObject(name = "한국시티은행"),
+                    @ExampleObject(name = "하나은행"),
+                    @ExampleObject(name = "신한은행"),
+                    @ExampleObject(name = "K-뱅크"),
+                    @ExampleObject(name = "카카오"),
+                    @ExampleObject(name = "토스"),
+                    @ExampleObject(name = "수협은행"),
+                    @ExampleObject(name = "부산은행"),
+                    @ExampleObject(name = "경남은행"),
+                    @ExampleObject(name = "광주은행"),
+                    @ExampleObject(name = "전북은행"),
+                    @ExampleObject(name = "제주은행"),
+                    @ExampleObject(name = "롯데카드"),
+                    @ExampleObject(name = "농협은행"),
+                    @ExampleObject(name = "삼성카드"),
+                    @ExampleObject(name = "현대카드"),
+                    @ExampleObject(name = "우리은행"),
+                    @ExampleObject(name = "신협은행"),
+                    @ExampleObject(name = "새마을금고"),
+                    @ExampleObject(name = "우체국"),
+            }),
+            @Parameter(name="Category", description = "카테고리", required = true, examples = {
+                    @ExampleObject(name = "SHOPPING"),
+                    @ExampleObject(name = "LIFE"),
+                    @ExampleObject(name = "TRAVEL"),
+                    @ExampleObject(name = "LIVING"),
+            }),
+            @Parameter(name = "cardDescription", description = "카드설명", required = true),
+    })
     @PostMapping("/create")
     public JSONData createCards(@RequestBody @Valid RequestCard card, Errors errors) {
 
@@ -70,6 +123,52 @@ public class AdminCardController {
      * 카드 일괄 수정 처리
      * @return
      */
+    @Operation(summary = "카드 일괄 수정", method = "POST", description = "카드 여러개를 수정한다.")
+    @ApiResponse(responseCode = "200")
+    @Parameters({
+            @Parameter(name = "cardName", description = "카드이름"),
+            @Parameter(name = "annualFee", description = "연회비", example = "1000 ~ 30000"),
+            @Parameter(name="CardType", description = "카드타입", examples = {
+                    @ExampleObject(name = "개인체크"),
+                    @ExampleObject(name = "개인신용"),
+                    @ExampleObject(name = "법인체크"),
+                    @ExampleObject(name = "법인신용")
+            }),
+            @Parameter(name = "limit", description = "카드 한도"),
+            @Parameter(name = "BankName", description = "은행이름", examples = {
+                    @ExampleObject(name = "한국은행"),
+                    @ExampleObject(name = "국민은행"),
+                    @ExampleObject(name = "제일은행"),
+                    @ExampleObject(name = "한국시티은행"),
+                    @ExampleObject(name = "하나은행"),
+                    @ExampleObject(name = "신한은행"),
+                    @ExampleObject(name = "K-뱅크"),
+                    @ExampleObject(name = "카카오"),
+                    @ExampleObject(name = "토스"),
+                    @ExampleObject(name = "수협은행"),
+                    @ExampleObject(name = "부산은행"),
+                    @ExampleObject(name = "경남은행"),
+                    @ExampleObject(name = "광주은행"),
+                    @ExampleObject(name = "전북은행"),
+                    @ExampleObject(name = "제주은행"),
+                    @ExampleObject(name = "롯데카드"),
+                    @ExampleObject(name = "농협은행"),
+                    @ExampleObject(name = "삼성카드"),
+                    @ExampleObject(name = "현대카드"),
+                    @ExampleObject(name = "우리은행"),
+                    @ExampleObject(name = "신협은행"),
+                    @ExampleObject(name = "새마을금고"),
+                    @ExampleObject(name = "우체국"),
+            }),
+            @Parameter(name="Category", description = "카테고리", examples = {
+                    @ExampleObject(name = "SHOPPING"),
+                    @ExampleObject(name = "LIFE"),
+                    @ExampleObject(name = "TRAVEL"),
+                    @ExampleObject(name = "LIVING"),
+            }),
+            @Parameter(name = "cardDescription", description = "카드설명"),
+            @Parameter(name = "isOpen", description = "카드 OPEN"),
+    })
     @PatchMapping("/updates")
     public JSONData updateCards(@RequestBody List<RequestUpdateCard> cards) {
         List<CardEntity> cardEntities = cardUpdateService.cardUpdates(cards);
@@ -97,9 +196,12 @@ public class AdminCardController {
     // endregion
 
     /**
-     * 카드 단일, 일괄 찐 삭제
+     * 카드 단일, 일괄 삭제
      * @return
      */
+    @Operation(summary = "카드 단일, 일괄 삭제", description = "카드 DB내에서 삭제", method = "DELETE")
+    @Parameter(name = "seq", required = true, description = "카드번호")
+    @ApiResponse(responseCode = "200")
     @DeleteMapping("/removes")
     public JSONData removeCards(@RequestParam("seq") List<Long> seq) {
         List<CardEntity> cardEntities = cardDeleteService.deletes(seq, false, "remove");
@@ -113,6 +215,9 @@ public class AdminCardController {
      * 유저 카드 단일, 일괄 찐 삭제
      * @return
      */
+    @Operation(summary = "유저 카드 단일, 일괄 삭제", description = "유저 카드 DB내에서 삭제", method = "DELETE")
+    @Parameter(name = "seq", required = true, description = "카드번호")
+    @ApiResponse(responseCode = "200")
     @DeleteMapping("/user/removes")
     public JSONData removeUsers(@RequestParam("seq") List<Long> seq) {
         List<UserCardEntity> userCardEntities = userCardDeleteService.deletes(seq, false, "remove");
