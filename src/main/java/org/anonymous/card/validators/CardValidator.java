@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Lazy
@@ -36,6 +37,9 @@ public class CardValidator implements Validator {
             String cardName = requestCard.getCardName();
             int annualFee = requestCard.getAnnualFee();
             Long limit = requestCard.getLimit();
+            CardType cardType = requestCard.getCardType();
+            BankName bankName = requestCard.getBankName();
+            Category category = requestCard.getCategory();
 
             if (cardRepository.exists(cardName)) {
                 errors.rejectValue("cardName", "Duplicated");
