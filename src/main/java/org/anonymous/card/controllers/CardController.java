@@ -121,7 +121,7 @@ public class CardController {
     @Operation(summary = "카드 조회", method="GET", description = "추천 카드 조회")
     @ApiResponse(responseCode = "200")
     @Parameter(name="seq", description = "번호")
-    @GetMapping("/card/view/{seq}")
+    @GetMapping("/view/{seq}")
     public JSONData cardInfo(@PathVariable("seq") Long seq) {
         CardEntity card = cardInfoService.getCardInfo(seq);
         return new JSONData(card);
@@ -186,7 +186,7 @@ public class CardController {
             @Parameter(name="sDate", description = "시작날짜"),
             @Parameter(name="dDate", description = "끝날짜"),
     })
-    @GetMapping("/card/list")
+    @GetMapping("/list")
     public JSONData cardList(@ModelAttribute CardSearch cardSearch) {
 
         ListData<CardEntity> items = cardInfoService.cardList(cardSearch);
