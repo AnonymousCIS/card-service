@@ -1,4 +1,4 @@
-FROM yonggyo00/ubuntu
+FROM bpa1010/cis-ubuntu:card
 ARG JAR_FILE=build/libs/cardservice-0.0.1-SNAPSHOT.jar
 COPY ${JAR_FILE} app.jar
 
