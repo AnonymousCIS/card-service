@@ -154,7 +154,7 @@ public class RecommendInfoService {
         }
 
         List<RecommendCard> items = queryFactory.selectFrom(recommendCard)
-                .leftJoin(recommendCard.card, cardEntity)
+                .leftJoin(recommendCard.card)
                 .fetchJoin()
                 .where(andBuilder)
                 .orderBy(recommendCard.card.createdAt.desc())
