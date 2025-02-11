@@ -31,32 +31,29 @@ public class CardValidator implements Validator {
 
         if (errors.hasErrors()) return;
 
-        List<RequestCard> card = (List<RequestCard>) target;
+        RequestCard requestCard = (RequestCard) target;
 
-        for (RequestCard requestCard : card) {
-            String cardName = requestCard.getCardName();
-            int annualFee = requestCard.getAnnualFee();
-            Long limit = requestCard.getLimit();
-            CardType cardType = requestCard.getCardType();
-            BankName bankName = requestCard.getBankName();
-            Category category = requestCard.getCategory();
+        String cardName = requestCard.getCardName();
+        int annualFee = requestCard.getAnnualFee();
+        Long limit = requestCard.getLimit();
+        CardType cardType = requestCard.getCardType();
+        BankName bankName = requestCard.getBankName();
+        Category category = requestCard.getCategory();
 
-            if (cardRepository.exists(cardName)) {
-                errors.rejectValue("cardName", "Duplicated");
-                return;
-            }
-
-            if (annualFee <= 0) {
-                errors.rejectValue("annualFee", "Limit");
-                return;
-            }
-
-            if (limit <= 0L) {
-                errors.rejectValue("limit", "Limit");
-                return;
-            }
+        if (cardRepository.exists(cardName)) {
+            errors.rejectValue("cardName", "Duplicated");
+            return;
         }
 
+        if (annualFee <= 0) {
+            errors.rejectValue("annualFee", "Limit");
+            return;
+        }
+
+        if (limit <= 0L) {
+            errors.rejectValue("limit", "Limit");
+            return;
+        }
     }
 }
 
