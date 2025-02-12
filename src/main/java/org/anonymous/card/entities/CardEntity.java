@@ -1,5 +1,6 @@
 package org.anonymous.card.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.anonymous.card.constants.BankName;
@@ -9,6 +10,7 @@ import org.anonymous.global.entities.BaseEntity;
 
 @Data
 @Entity
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class CardEntity extends BaseEntity {
 
     @Id @GeneratedValue
