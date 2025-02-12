@@ -52,4 +52,16 @@ public class CardEntity extends BaseEntity {
     private int item4_bankName; // 은행 종류 이 친구도 이넘으로 해야할듯. 특성4 -> 변할수도 있는 자료형
 
     private int item5_category; // 카테고리 SHOPPING, LIFE 등등.. -> 이넘으로 체크하자 특성5 -> 변할수도 있는 자료형
+
+    public String getCardTypeStr() {
+        return cardType == null ? "" : cardType.getTitle();
+    }
+
+    public String getBankNameStr() {
+        return bankName == null ? "" : bankName.getTitle();
+    }
+
+    public String getCategoryStr() {
+        return category == null ? "" : category.getTitle();
+    }
 }
