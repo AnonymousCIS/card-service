@@ -1,5 +1,6 @@
 package org.anonymous.card.controllers;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.anonymous.card.constants.BankName;
@@ -7,6 +8,7 @@ import org.anonymous.card.constants.CardType;
 import org.anonymous.card.constants.Category;
 
 @Data
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class RequestUpdateCard {
 
     private String cardName;
