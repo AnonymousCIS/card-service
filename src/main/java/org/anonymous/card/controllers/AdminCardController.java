@@ -13,12 +13,14 @@ import org.anonymous.card.entities.RecommendCard;
 import org.anonymous.card.entities.UserCardEntity;
 import org.anonymous.card.services.CardDeleteService;
 import org.anonymous.card.services.CardUpdateService;
+import org.anonymous.card.services.TrainService;
 import org.anonymous.card.services.recommend.RecommendDeleteService;
 import org.anonymous.card.services.usercard.UserCardDeleteService;
 import org.anonymous.card.validators.CardValidator;
 import org.anonymous.global.exceptions.BadRequestException;
 import org.anonymous.global.libs.Utils;
 import org.anonymous.global.rests.JSONData;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +41,7 @@ public class AdminCardController {
     private final CardDeleteService cardDeleteService;
     private final UserCardDeleteService userCardDeleteService;
     private final RecommendDeleteService recommendDeleteService;
+    private final TrainService trainService;
 
     // 1. RecommendCard D - (단일, 목록 일괄 처리) - DeleteMapping
 
@@ -224,6 +227,19 @@ public class AdminCardController {
     public JSONData removeUsers(@RequestParam("seq") List<Long> seq) {
         List<UserCardEntity> userCardEntities = userCardDeleteService.deletes(seq, false, "remove");
         return new JSONData(userCardEntities);
+    }
+
+    /**
+     * 대출 Train
+     *
+     * @return
+     */
+    @Operation(summary = "학습", description = "카드 DB 머신러닝 학습", method = "GET")
+    @ApiResponse(responseCode = "200")
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/train")
+    public String train() {
+        return trainService.train();
     }
 }
 

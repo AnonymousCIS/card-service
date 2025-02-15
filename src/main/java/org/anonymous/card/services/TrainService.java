@@ -49,7 +49,7 @@ public class TrainService {
 
     // 매일 자정에 훈련 진행
     @Scheduled(cron="0 0 0 * * *")
-    public void train() {
+    public String train() {
         try {
             log.info("훈련 시작");
             ProcessBuilder builder = new ProcessBuilder(runPath, scriptPath + "/train.py");
@@ -70,8 +70,12 @@ public class TrainService {
             items.forEach(item -> item.setDone(true));
             repository.saveAllAndFlush(items);
 
+            if (code == 0) return "훈련 완료";
+            else return errorString;
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return "훈련 실패";
     }
 }
