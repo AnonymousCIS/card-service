@@ -31,4 +31,6 @@ public class RequestCard {
 
     @NotBlank
     private String cardDescription; // 카드설명
+    
+    private boolean isOpen;
 }
