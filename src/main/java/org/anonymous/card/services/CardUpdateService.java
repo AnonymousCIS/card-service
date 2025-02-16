@@ -106,7 +106,7 @@ public class CardUpdateService {
         cardEntity.setCategory(card.getCategory()); // 수치화로 저장
         cardEntity.setDone(false);
         cardEntity.setCardDescription(card.getCardDescription());
-        cardEntity.setOpen(true);
+        cardEntity.setOpen(card.isOpen());
 
         cardEntity.setItem1_annualFee(card.getAnnualFee());
         cardEntity.setItem2_cardType(card.getCardType().getTarget());
