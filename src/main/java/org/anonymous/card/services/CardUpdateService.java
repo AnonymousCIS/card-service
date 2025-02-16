@@ -14,10 +14,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Random;
+import java.util.*;
 
 @Lazy
 @Service
@@ -28,6 +25,8 @@ public class CardUpdateService {
     // 이름이랑 설명 진짜 고민 많이 해봐야할듯 하네..
     
     private final CardRepository cardRepository;
+
+    private final CardInfoService infoService;
 
     /**
      * 카드 랜덤 생성 -> 건들지 말것.
@@ -123,6 +122,7 @@ public class CardUpdateService {
      * @return
      */
     public List<CardEntity> cardUpdates(List<RequestCard> cards) {
+        /*
         if (cards == null || cards.isEmpty()) {
             throw new BadRequestException();
         }
@@ -137,6 +137,21 @@ public class CardUpdateService {
         cardRepository.saveAllAndFlush(cardEntities);
 
         return cardEntities;
+         */
+
+        List<CardEntity> processed = new ArrayList<>();
+
+        for (RequestCard card : cards) {
+
+            CardEntity item = cardUpdate(card);
+
+            if (item != null) {
+
+                processed.add(item);
+            }
+        }
+
+        return processed;
     }
 
 
@@ -146,8 +161,13 @@ public class CardUpdateService {
      * @return
      */
     public CardEntity cardUpdate(RequestCard card) {
-        CardEntity cardEntity = cardRepository.findByCardName(card.getCardName()).orElseThrow(CardNotFoundException::new);
-        addInfo(card, cardEntity);
+        // CardEntity cardEntity = cardRepository.findByCardName(card.getCardName()).orElseThrow(CardNotFoundException::new);
+
+        Long seq = Objects.requireNonNullElse(card.getSeq(), 0L);
+
+        String mode = Objects.requireNonNullElse(card.getMode(), "edit");
+
+        CardEntity cardEntity = cardRepository.findById(seq).orElseThrow(CardNotFoundException::new);
 
         cardRepository.saveAndFlush(cardEntity);
 

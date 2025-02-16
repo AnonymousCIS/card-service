@@ -12,6 +12,8 @@ import org.anonymous.card.constants.Category;
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class RequestCard {
 
+    private Long seq;
+
     private String mode;
 
     @NotBlank
