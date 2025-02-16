@@ -8,6 +8,7 @@ import org.anonymous.card.controllers.RequestCard;
 import org.anonymous.card.repositories.CardRepository;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -31,26 +32,30 @@ public class CardValidator implements Validator {
 
         if (errors.hasErrors()) return;
 
-        RequestCard requestCard = (RequestCard) target;
+        RequestCard form = (RequestCard) target;
 
-        String cardName = requestCard.getCardName();
-        int annualFee = requestCard.getAnnualFee();
-        Long limit = requestCard.getLimit();
-        CardType cardType = requestCard.getCardType();
-        BankName bankName = requestCard.getBankName();
-        Category category = requestCard.getCategory();
+        String mode = form.getMode();
 
-        if (cardRepository.exists(cardName)) {
+        mode = StringUtils.hasText(mode) ? mode : "add";
+
+        String cardName = form.getCardName();
+        int annualFee = form.getAnnualFee();
+        Long limit = form.getLimit();
+//        CardType cardType = form.getCardType();
+//        BankName bankName = form.getBankName();
+//        Category category = form.getCategory();
+
+        if (mode.equals("add") && cardRepository.exists(cardName)) {
             errors.rejectValue("cardName", "Duplicated");
             return;
         }
 
-        if (annualFee <= 0) {
+        if (annualFee < 1000 || annualFee > 30000) {
             errors.rejectValue("annualFee", "Limit");
             return;
         }
 
-        if (limit <= 0L) {
+        if (limit < 1000000L || limit > 100000000L) {
             errors.rejectValue("limit", "Limit");
             return;
         }
