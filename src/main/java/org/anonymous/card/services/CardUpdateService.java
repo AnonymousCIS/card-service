@@ -6,7 +6,6 @@ import org.anonymous.card.constants.BankName;
 import org.anonymous.card.constants.CardType;
 import org.anonymous.card.constants.Category;
 import org.anonymous.card.controllers.RequestCard;
-import org.anonymous.card.controllers.RequestUpdateCard;
 import org.anonymous.card.entities.CardEntity;
 import org.anonymous.card.exceptions.CardNotFoundException;
 import org.anonymous.card.repositories.CardRepository;
@@ -123,13 +122,13 @@ public class CardUpdateService {
      * @param cards
      * @return
      */
-    public List<CardEntity> cardUpdates(List<RequestUpdateCard> cards) {
+    public List<CardEntity> cardUpdates(List<RequestCard> cards) {
         if (cards == null || cards.isEmpty()) {
             throw new BadRequestException();
         }
 
         List<CardEntity> cardEntities = new ArrayList<>();
-        for (RequestUpdateCard card : cards) {
+        for (RequestCard card : cards) {
             CardEntity cardEntity = cardRepository.findByCardName(card.getCardName()).orElseThrow(CardNotFoundException::new);
             addInfo(card, cardEntity);
             cardEntities.add(cardEntity);
@@ -146,7 +145,7 @@ public class CardUpdateService {
      * @param card
      * @return
      */
-    public CardEntity cardUpdate(RequestUpdateCard card) {
+    public CardEntity cardUpdate(RequestCard card) {
         CardEntity cardEntity = cardRepository.findByCardName(card.getCardName()).orElseThrow(CardNotFoundException::new);
         addInfo(card, cardEntity);
 
@@ -155,7 +154,7 @@ public class CardUpdateService {
         return cardEntity;
     }
 
-    private void addInfo(RequestUpdateCard card, CardEntity cardEntity) {
+    private void addInfo(RequestCard card, CardEntity cardEntity) {
         int annualFee = card.getAnnualFee() >= 0 ? card.getAnnualFee() : cardEntity.getAnnualFee();
         cardEntity.setAnnualFee(annualFee);
         cardEntity.setItem1_annualFee(annualFee);
