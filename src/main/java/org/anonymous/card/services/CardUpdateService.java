@@ -122,6 +122,7 @@ public class CardUpdateService {
      * @return
      */
     public List<CardEntity> cardUpdates(List<RequestCard> cards) {
+
         /*
         if (cards == null || cards.isEmpty()) {
             throw new BadRequestException();
@@ -168,6 +169,8 @@ public class CardUpdateService {
         String mode = Objects.requireNonNullElse(card.getMode(), "edit");
 
         CardEntity cardEntity = cardRepository.findById(seq).orElseThrow(CardNotFoundException::new);
+
+        addInfo(card, cardEntity);
 
         cardRepository.saveAndFlush(cardEntity);
 
