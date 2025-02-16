@@ -175,7 +175,8 @@ public class AdminCardController {
             @Parameter(name = "isOpen", description = "카드 OPEN"),
     })
     @PatchMapping("/updates")
-    public JSONData updateCards(@RequestBody List<RequestUpdateCard> cards) {
+    public JSONData updateCards(@RequestBody @Valid List<RequestCard> cards) {
+
         List<CardEntity> cardEntities = cardUpdateService.cardUpdates(cards);
         return new JSONData(cardEntities);
     }
