@@ -94,9 +94,9 @@ public class CardUpdateService {
     public CardEntity cardCreate(RequestCard card) {
         CardEntity cardEntity = new CardEntity();
 
-        if (card.getAnnualFee() >= 30000 || card.getAnnualFee() <= 1000 || card.getLimit() <= 1000000L || card.getLimit() >= 100000000L) { // 한도 및 카드 그ㅓ 뭐시기 처리
-            throw new BadRequestException();
-        }
+//        if (card.getAnnualFee() > 30000 || card.getAnnualFee() < 1000 || card.getLimit() < 1000000L || card.getLimit() > 100000000L) { // 한도 및 카드 그ㅓ 뭐시기 처리
+//            throw new BadRequestException();
+//        }
 
         cardEntity.setCardName(card.getCardName());
         cardEntity.setBankName(card.getBankName()); // 수치화로 저장
