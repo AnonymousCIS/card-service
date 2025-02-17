@@ -60,6 +60,16 @@ public class CardValidator implements Validator {
             return;
         }
     }
+
+    public void validates(List<RequestCard> target, Errors errors) {
+        if (errors.hasErrors()) return;
+
+        if (!target.isEmpty()) {
+            for (RequestCard card : target) {
+                validate(card,errors);
+            }
+        }
+    }
 }
 
 
