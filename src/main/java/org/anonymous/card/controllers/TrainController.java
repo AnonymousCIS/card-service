@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.anonymous.card.entities.CardEntity;
-import org.anonymous.card.entities.TrainLog;
+import org.anonymous.card.entities.TrainCardLog;
 import org.anonymous.card.exceptions.TrainLogNotFoundException;
 import org.anonymous.card.services.PredictService;
 import org.anonymous.card.services.TrainLogInfoService;
@@ -63,7 +63,7 @@ public class TrainController {
     @Parameter(name="seq", description = "검색번호")
     @GetMapping("/train/log")
     public JSONData logGet(@RequestParam("seq") Long seq) {
-        TrainLog trainLog = trainLogInfoService.get(seq);
+        TrainCardLog trainLog = trainLogInfoService.get(seq);
         if (trainLog == null) {
             throw new TrainLogNotFoundException();
         }
@@ -75,7 +75,7 @@ public class TrainController {
     @ApiResponse(responseCode = "200")
     @GetMapping("/train/logs")
     public JSONData logGetList(@ModelAttribute CommonSearch search) {
-        ListData<TrainLog> trainLog = trainLogInfoService.getList(search);
+        ListData<TrainCardLog> trainLog = trainLogInfoService.getList(search);
         if (trainLog == null) {
             throw new TrainLogNotFoundException();
         }
