@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.anonymous.card.entities.CardEntity;
 import org.anonymous.card.entities.QCardEntity;
-import org.anonymous.card.entities.TrainLog;
+import org.anonymous.card.entities.TrainCardLog;
 import org.anonymous.card.repositories.CardRepository;
 import org.anonymous.card.repositories.TrainLogRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,7 +55,7 @@ public class TrainService {
     @Scheduled(cron="0 0 0 * * *")
     public String train() {
         try {
-            TrainLog trainLog = new TrainLog();
+            TrainCardLog trainLog = new TrainCardLog();
             trainLog.setDone(true);
             log.info("훈련 시작");
             ProcessBuilder builder = new ProcessBuilder(runPath, scriptPath + "/train.py");

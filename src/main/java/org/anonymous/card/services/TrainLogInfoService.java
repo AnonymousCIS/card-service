@@ -4,9 +4,8 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.anonymous.card.entities.QTrainLog;
+import org.anonymous.card.entities.QTrainCardLog;
 import org.anonymous.card.entities.TrainCardLog;
-import org.anonymous.card.entities.TrainLog;
 import org.anonymous.card.exceptions.TrainLogNotFoundException;
 import org.anonymous.card.repositories.TrainLogRepository;
 import org.anonymous.global.libs.Utils;
@@ -55,13 +54,13 @@ public class TrainLogInfoService {
 
         int offset = (page - 1) * limit;
 
-        QTrainLog trainLog = QTrainLog.trainLog;
+        QTrainCardLog trainCardLog = QTrainCardLog.trainCardLog;
 
-        JPAQuery<TrainCardLog> query = queryFactory.selectFrom(trainLog)
+        JPAQuery<TrainCardLog> query = queryFactory.selectFrom(trainCardLog)
                 .offset(offset)
                 .limit(limit);
 
-        query.orderBy(trainLog.createdAt.desc());
+        query.orderBy(trainCardLog.createdAt.desc());
         List<TrainCardLog> items = query.fetch();
         long total = trainLogRepository.count();
         int ranges = utils.isMobile() ? 5 : 10;
