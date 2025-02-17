@@ -10,7 +10,7 @@ import org.anonymous.global.entities.BaseMemberEntity;
 @Data
 @Entity
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class TrainLog extends BaseMemberEntity {
+public class TrainCardLog extends BaseMemberEntity {
 
     @Id @GeneratedValue
     private Long seq;
