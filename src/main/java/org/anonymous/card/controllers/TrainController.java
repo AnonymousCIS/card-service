@@ -16,10 +16,7 @@ import org.anonymous.global.paging.CommonSearch;
 import org.anonymous.global.paging.ListData;
 import org.anonymous.global.rests.JSONData;
 import org.springframework.context.annotation.Profile;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -64,7 +61,7 @@ public class TrainController {
     @Operation(summary = "학습 로그 검색", method="GET", description = "학습한 기록을 검색한다.")
     @ApiResponse(responseCode = "200")
     @Parameter(name="seq", description = "검색번호")
-    @GetMapping
+    @GetMapping("/train/log")
     public JSONData logGet(@RequestParam("seq") Long seq) {
         TrainLog trainLog = trainLogInfoService.get(seq);
         if (trainLog == null) {
@@ -76,8 +73,8 @@ public class TrainController {
 
     @Operation(summary = "학습 로그 검색", method="GET", description = "학습한 기록을 검색하며, List로 반환해준다.")
     @ApiResponse(responseCode = "200")
-    @GetMapping
-    public JSONData logGetList(CommonSearch search) {
+    @GetMapping("/train/logs")
+    public JSONData logGetList(@ModelAttribute CommonSearch search) {
         ListData<TrainLog> trainLog = trainLogInfoService.getList(search);
         if (trainLog == null) {
             throw new TrainLogNotFoundException();
