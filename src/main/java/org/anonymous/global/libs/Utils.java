@@ -59,6 +59,20 @@ public class Utils {
 
     }
 
+    // Browser 정보 Mobile 여부 확인
+    public boolean isMobile() {
+
+        // 요청 header -> User-Agent (Browser 정보)
+        // ★ iPhone / Android 판별도 가능,
+        // 어느 층의 User 가 더 많은지 판단해 App 개발에 활용 ★
+        String ua = request.getHeader("User-Agent");
+
+        // 해당 Pattern 이 포함되면 Mobile 판단
+        String pattern = ".*(iPhone|iPod|iPad|BlackBerry|Android|Windows CE|LG|MOT|SAMSUNG|SonyEricsson).*";
+
+        return StringUtils.hasText(ua) && ua.matches(pattern);
+    }
+
     /**
      * REST 커맨드 객체 검증 실패시에 에러 코드를 가지고 메세지 추출
      *
