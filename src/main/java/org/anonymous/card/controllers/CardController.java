@@ -18,6 +18,7 @@ import org.anonymous.card.services.usercard.UserCardUpdateService;
 import org.anonymous.global.paging.ListData;
 import org.anonymous.global.rests.JSONData;
 import org.anonymous.member.MemberUtil;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -111,7 +112,16 @@ public class CardController {
     })
     @GetMapping("/recommend/list")
     public JSONData recommendList(@ModelAttribute RecommendCardSearch search) {
-        ListData<RecommendCard> items = recommendInfoService.cardList(search);
+        ListData<RecommendCard> items = new ListData<>();
+        String mode = search.getMode();
+        if (StringUtils.hasText(mode) && mode.equals("USER")) {
+            items = recommendInfoService.getMyList(search);
+        } else if (StringUtils.hasText(mode) && mode.equals("ADMIN") && memberUtil.isAdmin()) {
+            items = recommendInfoService.cardList(search);
+        } else if (memberUtil.isAdmin()){
+            items = recommendInfoService.cardList(search);
+        }
+
         return new JSONData(items);
     }
 
@@ -295,9 +305,11 @@ public class CardController {
         ListData<UserCardEntity> cards = new ListData<>();
 
         String mode = search.getMode();
-        if (search.getMode().equals("USER")) {
+        if (StringUtils.hasText(mode) && mode.equals("USER")) {
             cards = userCardInfoService.getMyList(search);
-        } else if (search.getMode().equals("ADMIN") && memberUtil.isAdmin()) {
+        } else if (StringUtils.hasText(mode) && mode.equals("ADMIN") && memberUtil.isAdmin()) {
+            cards = userCardInfoService.cardList(search);
+        } else if (memberUtil.isAdmin()){
             cards = userCardInfoService.cardList(search);
         }
 
