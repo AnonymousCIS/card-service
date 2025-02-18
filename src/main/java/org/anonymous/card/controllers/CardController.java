@@ -17,6 +17,7 @@ import org.anonymous.card.services.usercard.UserCardInfoService;
 import org.anonymous.card.services.usercard.UserCardUpdateService;
 import org.anonymous.global.paging.ListData;
 import org.anonymous.global.rests.JSONData;
+import org.anonymous.member.MemberUtil;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +31,7 @@ import java.util.List;
 public class CardController {
 
 
+    private final MemberUtil memberUtil;
     private final CardInfoService cardInfoService;
     private final RecommendInfoService recommendInfoService;
     private final UserCardInfoService userCardInfoService;
@@ -290,7 +292,15 @@ public class CardController {
     })
     @GetMapping("/user/list")
     public JSONData userCardList(@ModelAttribute RecommendCardSearch search) {
-        ListData<UserCardEntity> cards = userCardInfoService.cardList(search);
+        ListData<UserCardEntity> cards = new ListData<>();
+
+        String mode = search.getMode();
+        if (search.getMode().equals("USER")) {
+            cards = userCardInfoService.getMyList(search);
+        } else if (search.getMode().equals("ADMIN") && memberUtil.isAdmin()) {
+            cards = userCardInfoService.cardList(search);
+        }
+
         return new JSONData(cards);
     }
 

@@ -19,6 +19,7 @@ import org.anonymous.global.libs.Utils;
 import org.anonymous.global.paging.ListData;
 import org.anonymous.global.paging.Pagination;
 import org.anonymous.global.rests.JSONData;
+import org.anonymous.member.Member;
 import org.anonymous.member.MemberUtil;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpEntity;
@@ -56,7 +57,7 @@ public class UserCardInfoService {
         try {
             String email = om.writeValueAsString(Objects.requireNonNull(responseEntity.getBody()).getData());
 
-            if (!email.equals(card.getEmail())) {
+            if (!email.equals(card.getEmail()) || !memberUtil.isAdmin()) {
                 throw new CardNotFoundException();
             }
 
@@ -163,5 +164,26 @@ public class UserCardInfoService {
         Pagination pagination = new Pagination(page, (int) total, 10, limit, request);
 
         return new ListData<>(items, pagination);
+    }
+
+
+    /**
+     * 현재 로그인한 회원이 작성한 게시글 목록 조회
+     *
+     * MyPage 에서 연동
+     *
+     * @param search
+     * @return
+     */
+    public ListData<UserCardEntity> getMyList(RecommendCardSearch search) {
+
+        // 템플릿 출력시 오류 방지위한 빈 객체
+        if (!memberUtil.isLogin()) return new ListData<>(List.of(), null);
+
+        Member member = memberUtil.getMember();
+        String email = member.getEmail();
+        search.setEmail(List.of(email));
+
+        return cardList(search);
     }
 }
