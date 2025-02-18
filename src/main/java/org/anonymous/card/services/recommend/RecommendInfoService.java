@@ -1,6 +1,7 @@
 package org.anonymous.card.services.recommend;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.DateTimePath;
@@ -10,9 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.anonymous.card.constants.BankName;
 import org.anonymous.card.constants.CardType;
 import org.anonymous.card.constants.Category;
-import org.anonymous.card.controllers.CardSearch;
 import org.anonymous.card.controllers.RecommendCardSearch;
-import org.anonymous.card.entities.CardEntity;
 import org.anonymous.card.entities.QCardEntity;
 import org.anonymous.card.entities.QRecommendCard;
 import org.anonymous.card.entities.RecommendCard;
@@ -26,9 +25,6 @@ import org.anonymous.global.rests.JSONData;
 import org.anonymous.member.Member;
 import org.anonymous.member.MemberUtil;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -59,7 +55,8 @@ public class RecommendInfoService {
         ResponseEntity<JSONData> responseEntity = utils.returnData();
 
         try {
-            String email = om.writeValueAsString(Objects.requireNonNull(responseEntity.getBody()).getData());
+            JsonNode root = om.readTree(om.writeValueAsString(Objects.requireNonNull(responseEntity.getBody()).getData()));
+            String email = root.get("email").asText();
 
             if (!email.equals(card.getEmail())) {
                 throw new CardNotFoundException();

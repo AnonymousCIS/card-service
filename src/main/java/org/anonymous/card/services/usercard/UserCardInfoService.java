@@ -53,10 +53,7 @@ public class UserCardInfoService {
         try {
 
             JsonNode root = om.readTree(om.writeValueAsString(Objects.requireNonNull(responseEntity.getBody()).getData()));
-
             String email = root.get("email").asText();
-
-            System.out.println("email : " + email);
 
 
             if (!email.equals(card.getEmail()) && !memberUtil.isAdmin()) {
