@@ -23,6 +23,7 @@ import org.anonymous.global.libs.Utils;
 import org.anonymous.global.paging.ListData;
 import org.anonymous.global.paging.Pagination;
 import org.anonymous.global.rests.JSONData;
+import org.anonymous.member.Member;
 import org.anonymous.member.MemberUtil;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpEntity;
@@ -167,5 +168,26 @@ public class RecommendInfoService {
         Pagination pagination = new Pagination(page, (int) total, 10, limit, request);
 
         return new ListData<>(items, pagination);
+    }
+
+    /**
+     * 현재 로그인한 회원의 카드 목록 조회
+     *
+     * MyPage에서 연동
+     *
+     * @param search
+     * @return
+     */
+    public ListData<RecommendCard> getMyList(RecommendCardSearch search) {
+
+        if (!memberUtil.isLogin()) return new ListData<>(List.of(), null);
+
+        Member member = memberUtil.getMember();
+
+        String email = member.getEmail();
+
+        search.setEmail(List.of(email));
+
+        return cardList(search);
     }
 }
