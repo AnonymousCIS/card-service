@@ -8,4 +8,6 @@ import java.util.List;
 public class RecommendCardSearch extends CardSearch{
 
     private List<String> email;
+
+    private String mode;
 }
