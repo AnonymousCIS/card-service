@@ -2,6 +2,7 @@ package org.anonymous.card.services.usercard;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.DateTimePath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -21,16 +22,11 @@ import org.anonymous.global.paging.Pagination;
 import org.anonymous.global.rests.JSONData;
 import org.anonymous.member.Member;
 import org.anonymous.member.MemberUtil;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -55,9 +51,15 @@ public class UserCardInfoService {
         ResponseEntity<JSONData> responseEntity = utils.returnData();
 
         try {
-            String email = om.writeValueAsString(Objects.requireNonNull(responseEntity.getBody()).getData());
 
-            if (!email.equals(card.getEmail()) || !memberUtil.isAdmin()) {
+            JsonNode root = om.readTree(om.writeValueAsString(Objects.requireNonNull(responseEntity.getBody()).getData()));
+
+            String email = root.get("email").asText();
+
+            System.out.println("email : " + email);
+
+
+            if (!email.equals(card.getEmail()) && !memberUtil.isAdmin()) {
                 throw new CardNotFoundException();
             }
 
