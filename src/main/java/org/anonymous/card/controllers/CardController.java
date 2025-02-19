@@ -324,7 +324,7 @@ public class CardController {
     @ApiResponse(responseCode = "200", description = "유저 카드 삭제. 실제로 DB 내에서는 지워지는게 아님.")
     @Parameter(name="seq", description = "유저 카드 번호")
     @PatchMapping("/user/deletes")
-    public JSONData deleteUserCards(List<Long> seq) {
+    public JSONData deleteUserCards(@RequestBody List<Long> seq) {
         List<UserCardEntity> cards = userCardDeleteService.deletes(seq, false, "remove");
         return new JSONData(cards);
     }
